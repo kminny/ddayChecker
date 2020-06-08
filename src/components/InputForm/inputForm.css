@@ -1,0 +1,15 @@
+#name:focus {
+  color: #000;
+}
+
+#name {
+  color: #fff;
+}
+
+#message:focus {
+  color: #000;
+}
+
+#message {
+  color: #fff;
+}
