@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
-import logo from './logo.svg';
+
+import { graphql, MutationFunction } from 'react-apollo';
+import { compose } from 'recompose';
+import { GET_MESSAGES, UPLOAD_MESSAGE } from './queries/sharedQueries';
+
 import './App.css';
 
 import CardContainer from './components/CardContainer';
@@ -14,12 +17,13 @@ interface IState {
   startingDate: Date;
   message: string;
   name: string;
-  messages: string[];
-  names: string[];
   showTimeType: string;
 }
 
-interface IProps {}
+interface IProps {
+  GetMessagesQuery: any;
+  UploadMessageMutation: MutationFunction;
+}
 
 class App extends Component<IProps, IState> {
   constructor(props: any) {
@@ -31,8 +35,6 @@ class App extends Component<IProps, IState> {
       dDay: new Date('June 21, 2020 09:00:00'),
       message: '',
       name: '',
-      messages: [],
-      names: [],
       showTimeType: 'millisecond',
     };
   }
@@ -65,10 +67,17 @@ class App extends Component<IProps, IState> {
   };
 
   onSubmitButton = () => {
+    const { UploadMessageMutation, GetMessagesQuery } = this.props;
     const { message, name } = this.state;
 
-    this.state.messages.push(message);
-    this.state.names.push(name);
+    UploadMessageMutation({
+      variables: {
+        message,
+        name,
+      },
+    }).then(() => {
+      GetMessagesQuery.refetch();
+    });
 
     this.setState({
       message: '',
@@ -83,16 +92,18 @@ class App extends Component<IProps, IState> {
   };
 
   render() {
-    const {
-      currentDate,
-      dDay,
-      startingDate,
-      messages,
-      names,
-      message,
-      name,
-      showTimeType,
-    } = this.state;
+    const { GetMessagesQuery } = this.props;
+
+    if (GetMessagesQuery.loading || !GetMessagesQuery.getMessages) {
+      return <div>loading</div>;
+    }
+
+    const { messages } = GetMessagesQuery.getMessages;
+    messages.sort((a: any, b: any) => {
+      return b['id'] - a['id'];
+    });
+
+    const { currentDate, dDay, startingDate, message, name, showTimeType } = this.state;
 
     const leftTime: number = dDay.getTime() - currentDate.getTime();
     const leftTimePercentage =
@@ -116,33 +127,33 @@ class App extends Component<IProps, IState> {
                 (showTimeType === 'day' && `${dDay.getDate() - currentDate.getDate()} 일`)}
             </div>
           </p>
-          {/* <p>message: {messages.map((message) => `${message} `)}</p> */}
-          <p>
-            {/* <input name="message" onChange={inputHandler}></input>
-            <button onClick={messageInputButtonClickHandler}>입력</button> */}
-          </p>
+
           <InputForm
             handleInputChange={this.handleInputChange}
             onSubmitButton={this.onSubmitButton}
             message={message}
             name={name}
           />
-          {messages.map((message, index) => {
-            return <CardContainer message={message} name={names[index]} />;
+          {messages.map((message: any, index: number) => {
+            return (
+              <CardContainer
+                message={message.message}
+                name={message.name}
+                createdAt={message.createdAt}
+              />
+            );
           })}
-
-          {/* <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a> */}
         </header>
       </div>
     );
   }
 }
 
-export default App;
+export default compose(
+  graphql(GET_MESSAGES, {
+    name: 'GetMessagesQuery',
+  }),
+  graphql(UPLOAD_MESSAGE, {
+    name: 'UploadMessageMutation',
+  })
+)(App);
