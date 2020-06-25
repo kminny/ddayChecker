@@ -15,10 +15,10 @@ const ProgressBar = (props: any) => {
   return (
     <>
       <div className="progress-container progress-info">
-        <StartingDate className="progress-badge">2020.6.7</StartingDate>
-        <span className="progress-badge">진행상황</span>
+        <StartingDate className="progress-badge">2020.6.21</StartingDate>
+        <span className="progress-badge">진행상황 ( {value.toFixed(4)}% )</span>
         <Progress max="100" value={value.toFixed(2)}>
-          <span className="progress-value">{value.toFixed(4)}%</span>
+          <span className="progress-value">2020.9.27</span>
         </Progress>
       </div>
     </>

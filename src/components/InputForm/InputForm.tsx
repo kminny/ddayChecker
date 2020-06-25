@@ -40,7 +40,13 @@ const InputForm = (props: IProps) => {
         ></Input>
       </FormGroup>
       <FormGroup check></FormGroup>
-      <Button color="primary" type="submit" onClick={onSubmitButton}>
+      <Button
+        disabled={!message || !name}
+        id="submitButton"
+        color="primary"
+        type="submit"
+        onClick={onSubmitButton}
+      >
         메세지 남기기
       </Button>
     </>

@@ -31,8 +31,8 @@ class App extends Component<IProps, IState> {
 
     this.state = {
       currentDate: new Date(),
-      startingDate: new Date('June 7, 2020 09:00:00'),
-      dDay: new Date('June 21, 2020 09:00:00'),
+      startingDate: new Date('June 21, 2020 09:00:00'),
+      dDay: new Date('Sep 27, 2020 09:00:00'),
       message: '',
       name: '',
       showTimeType: 'millisecond',
@@ -124,7 +124,7 @@ class App extends Component<IProps, IState> {
                 (showTimeType === 'second' && `${Math.floor(leftTime / 1000)} 초`) ||
                 (showTimeType === 'minute' && `${Math.floor(leftTime / 1000 / 60)} 분`) ||
                 (showTimeType === 'hour' && `${Math.floor(leftTime / 1000 / 60 / 60)} 시간`) ||
-                (showTimeType === 'day' && `${dDay.getDate() - currentDate.getDate()} 일`)}
+                (showTimeType === 'day' && `${Math.floor(leftTime / 1000 / 60 / 60 / 24)} 일`)}
             </div>
           </p>
 
