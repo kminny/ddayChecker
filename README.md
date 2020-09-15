@@ -1,6 +1,6 @@
 ## 성재 시험 디데이 계산기 및 응원 SNS
 
-[페이지 이동](http://dely-dday-checker.s3-website.ap-northeast-2.amazonaws.com/)
+[페이지 이동](http://dely-dday-checker.s3-website.ap-northeast-2.amazonaws.com/) (해당 웹페이지는 모바일에 최적화 되어 있습니다.)
 
 ## 주요 기능
 
